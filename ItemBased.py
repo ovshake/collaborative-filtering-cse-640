@@ -31,11 +31,12 @@ def getPredictedRating(item , user , rating_matrix_base , cosine_similarity):
     predicted_rating = 0
     for item_id in range(rating_matrix_base.shape[ITEM_AXIS]):
         if item_id != item:
-            total_cosine_similarity += cosine_similarity[item_id][user]
-
+            total_cosine_similarity += cosine_similarity[item_id][item]
+    if total_cosine_similarity == 0:
+        return 0 
     for item_id in range(rating_matrix_base.shape[ITEM_AXIS]):
-        if item_id != item:
-            predicted_rating += (cosine_similarity[item_id][user] / total_cosine_similarity) * rating_matrix_base[item_id][user]
+        if item_id != item: 
+            predicted_rating += (cosine_similarity[item_id][item] / total_cosine_similarity) * rating_matrix_base[item_id][user]
     return predicted_rating
 
 
