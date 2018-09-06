@@ -33,7 +33,7 @@ def get_k_most_similiar(k , user ,cosine_similarity):
 	user_tups = []
 	for user_id in range(cosine_similarity.shape[0]):
 		if user_id != user:
-			tup = (USER , cosine_similarity[user_id][user])
+			tup = (user_id , cosine_similarity[user_id][user])
 			user_tups.append(tup) 
 	user_tups = sorted(user_tups , key = lambda x : x[RATING_GIVEN] , reverse = True)
 	user_tups = user_tups[:k] 
@@ -67,12 +67,8 @@ def getMeanAbsoluteError(filename , k):
 	test_file_name = filename+".test"
 	rating_matrix_base = convertDataframeToMatrix(convertFileToDataframe(train_file_name))
 	rating_matrix_test = convertDataframeToMatrix(convertFileToDataframe(test_file_name))
-	# print(rating_matrix_test[333][3])
 	cosine_similarity = 1 - pairwise_distances(rating_matrix_base , metric='cosine')
 	mean_absolute_error = 0
-	# p = getPredictedRating(473 , 602 , rating_matrix_base , cosine_similarity , k = k)
-	# #print("jnbdsjdf" , p)
-	# #sys.exit()
 	total_prediction = 0
 	for user_id in range(rating_matrix_test.shape[USER_AXIS]):
 		for item_id in range(rating_matrix_test.shape[ITEM_AXIS]):
