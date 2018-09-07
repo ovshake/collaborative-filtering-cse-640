@@ -49,19 +49,23 @@ def getMeanAbsoluteError(filename):
     rating_matrix_test = np.transpose(rating_matrix_test)
     cosine_similarity = 1 - pairwise_distances(rating_matrix_base , metric='cosine')
     mean_absolute_error = 0
+    total_prediction = 0
     for item_id in range(rating_matrix_test.shape[ITEM_AXIS]):
         for user_id in range(rating_matrix_base.shape[USER_AXIS]):
             if rating_matrix_test[item_id][user_id] != 0:
                 mean_absolute_error += abs(getPredictedRating(item_id , user_id , rating_matrix_base , cosine_similarity) - rating_matrix_test[item_id][user_id])
-    
-    return mean_absolute_error
+                total_prediction += 1
+    return mean_absolute_error / total_prediction
 
 if __name__ == "__main__":
     mean_error = 0
+    fold_error = []
     for i in range(1,6):
         split_error = getMeanAbsoluteError("u"+str(i))
         print("for u{} the mean abs error is {}".format(i , split_error))
         mean_error += split_error
+        fold_error.append(split_error)
+    print(fold_error)
 
     print("Mean Error is {}".format(mean_error / 5))
 

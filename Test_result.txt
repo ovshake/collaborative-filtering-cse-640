@@ -1,0 +1,36 @@
+for u1 the mean abs error is 2.787376010322463 k = -1
+for u2 the mean abs error is 2.808302396421165 k = -1
+for u3 the mean abs error is 2.7748137964340205 k = -1
+for u4 the mean abs error is 2.7626085653718224 k = -1
+for u5 the mean abs error is 2.7607582241448845 k = -1
+2.77877179854
+for u1 the mean abs error is 2.014271864795014 k = 10
+for u2 the mean abs error is 2.0749984114210016 k = 10
+for u3 the mean abs error is 2.0923631383289982 k = 10
+for u4 the mean abs error is 2.041943345749709 k = 10
+for u5 the mean abs error is 2.063952631459724 k = 10
+2.05750587835
+for u1 the mean abs error is 2.0551410004802326 k = 20
+for u2 the mean abs error is 2.1207821520377705 k = 20
+for u3 the mean abs error is 2.111157999614918 k = 20
+for u4 the mean abs error is 2.078980119346112 k = 20
+for u5 the mean abs error is 2.0847333433418904 k = 20
+2.09015892296
+for u1 the mean abs error is 2.087976696986358 k = 30
+for u2 the mean abs error is 2.1592747433853896 k = 30
+for u3 the mean abs error is 2.132746915223271 k = 30
+for u4 the mean abs error is 2.11411349573992 k = 30
+for u5 the mean abs error is 2.116107246609002 k = 30
+2.12204381959
+for u1 the mean abs error is 2.124725445253917 k = 40
+for u2 the mean abs error is 2.1915741411063445 k = 40
+for u3 the mean abs error is 2.1583119055920705 k = 40
+for u4 the mean abs error is 2.144208089568555 k = 40
+for u5 the mean abs error is 2.142793668495481 k = 40
+2.15232265
+for u1 the mean abs error is 2.1546220658936686 k = 50
+for u2 the mean abs error is 2.2192690358294347 k = 50
+for u3 the mean abs error is 2.1833970074186877 k = 50
+for u4 the mean abs error is 2.1689927380717693 k = 50
+for u5 the mean abs error is 2.165394698170746 k = 50
+2.17833510908

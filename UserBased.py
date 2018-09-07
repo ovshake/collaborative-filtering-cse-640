@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd 
 from sklearn.metrics import pairwise_distances
 import sys
+import matplotlib.pyplot as plt 
 
 NUM_USERS = 943
 NUM_ITEMS = 1682
@@ -44,7 +45,7 @@ def getPredictedRating(item , user , rating_matrix_base , cosine_similarity, k =
 	
 	total_cosine_similarity = 0
 	predicted_rating = 0
-	if k == -1:
+	if k == 60:
 		for user_id in range(rating_matrix_base.shape[USER_AXIS]):
 			if user_id != user:
 				total_cosine_similarity += cosine_similarity[user][user_id]
@@ -79,14 +80,25 @@ def getMeanAbsoluteError(filename , k):
 	return mean_absolute_error / total_prediction
 
 if __name__ == "__main__":
-	k_vals = [-1, 10 , 20 , 30 , 40 , 50]
+	k_vals = [10 , 20 , 30 , 40 , 50 , 60]
+	k_mae = []
 	for k in k_vals:
 		mean_error = 0
+		fold_errors = []
 		for i in range(1, 6):
 			split_error = getMeanAbsoluteError("u"+str(i) , k = k)
 			print("for u{} the mean abs error is {} k = {}".format(i , split_error , k))
+			fold_errors.append(split_error)
 			mean_error += split_error
+		print(fold_errors)
 		print(mean_error / 5)
+		k_mae.append((mean_error / 5)
+
+	plt.plot(x = k_vals , y = k_mae)
+	plt.title("Top K similiar user Vs Mean Absolute Error")
+	plt.xlabel('K (Top K similiar users)')
+	plt.ylabel('Mean Abslute Error')
+	plt.show()
 
 
 
