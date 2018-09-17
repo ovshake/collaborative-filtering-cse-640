@@ -44,57 +44,65 @@ def get_NMAE(total_matrix , X , filename):
 		rating = df.loc[i , RATING_COL]
 		user_id = df.loc[i , USER_ID_COL]
 		item_id = df.loc[i , ITEM_ID_COL]
-		error += (abs(rating - X[user_id - 1][item_id - 1]) / 4)
+		pred_rating = X[user_id - 1][item_id - 1]
+		# print("prediction {}".format(pred_rating))
+		error += abs(rating - X[user_id - 1][item_id - 1]) / 4
 
 	return error / total_pred
 
 
+def populate_matrix(filename):
+	df_train = convertFileToDataframe(filename+".base")
+	# df_test = convertFileToDataframe(filename+".test") 
+	Y = np.zeros((NUM_USERS , NUM_ITEMS))
+	for i in range(len(df_train)):
+		rating = df_train.loc[i , RATING_COL]
+		user_id = df_train.loc[i , USER_ID_COL]
+		item_id = df_train.loc[i , ITEM_ID_COL]
+		Y[user_id - 1][item_id - 1] = rating
+	# for i in range(len(df_test)):
+	# 	rating = df_test.loc[i , RATING_COL]
+	# 	user_id = df_test.loc[i , USER_ID_COL]
+	# 	item_id = df_test.loc[i , ITEM_ID_COL]
+	# 	Y[user_id - 1][item_id - 1] = rating
+
+	return Y 
 
 
+def train_(fold_num , num_iters , lmbda):
 
-def train_(total_matrix , fold_num , num_iters , lmbda):
 	mask = get_mask("u"+str(fold_num)+".base")
+	total_matrix = populate_matrix("u"+str(fold_num))
+	# print(total_matrix)
 	X = np.random.rand(NUM_USERS , NUM_ITEMS)
-	# u, s, v = np.linalg.svd(X)
-	# print(s)
 	for i in range(num_iters):
-		if i % 100 == 0:
-			print(i)
-		
+		if i % 20 == 0:
+			print(i)	
 		T_ = X + total_matrix - np.multiply(mask , X)
 		u, s, v = np.linalg.svd(T_) 
-		# print("u shape" , u.shape)
-		# print("s" , s.shape)
-		# print("v shape" , v.shape)
-		# print(s.shape)
 		sigma = np.zeros((NUM_USERS , NUM_ITEMS))
 		for j in range(s.shape[0]):
 			sigma[j][j] = max(0 , s[j] - (lmbda / 2)) 
-		# print("u shape" , u.shape)
-		# print("Sigma Shape" , sigma.shape)
-		# print("v shape" , v.shape)
 		X = np.matmul(u , np.matmul(sigma , v))
 
-	error = get_NMAE(total_matrix , X , "u"+fold_num+".test")
+	error = get_NMAE(total_matrix , X , "u"+str(fold_num)+".test")
 	print("For fold {} the error is {}".format(fold_num , error))
 	return error
 
-
-
-
-
-
-
-
-
-
-if __name__ == "__main__":
-	total_matrix = convertDataframeToMatrix(convertFileToDataframe("u.data"))
+def per_regulariser(lmbda):
 	TOTAL_FOLDS = 5
 	per_fold_error = []
 	for i in range(1 , TOTAL_FOLDS + 1):
-		e = train_(total_matrix , i + 1 , 1000 , 0.2)
+		e = train_(i , 100 , lmbda)
 		per_fold_error.append(e)
+	print("for lambda {}".format(lmbda))
 	print(per_fold_error)
+	print("Avg. Error {}".format(sum(per_fold_error) / 5)) 
+
+if __name__ == "__main__":
+	lmbdas = [0.2 , 0.5, 1 , 3]
+	for l in lmbdas:
+		per_regulariser(l) 
+	
 
 	
