@@ -58,6 +58,8 @@ def train_(total_matrix , fold_num , num_iters , lmbda):
 	# u, s, v = np.linalg.svd(X)
 	# print(s)
 	for i in range(num_iters):
+		if i % 100 == 0:
+			print(i)
 		
 		T_ = X + total_matrix - np.multiply(mask , X)
 		u, s, v = np.linalg.svd(T_) 
