@@ -100,7 +100,7 @@ def per_regulariser(lmbda):
 	print("Avg. Error {}".format(sum(per_fold_error) / 5)) 
 
 if __name__ == "__main__":
-	lmbdas = [0.2 , 0.5, 1 , 3]
+	lmbdas = [2 , 0.2 , 0.5, 1 , 3]
 	for l in lmbdas:
 		per_regulariser(l) 
 	
