@@ -40,27 +40,29 @@ def get_age_one_hot(age):
 		index = 7 
 	else:
 		index = 8 
-	vec = np.zeros((1, 8))
+	vec = np.zeros((8, ))
 	vec[index - 1] = 1
 	return vec 
 
 def get_one_hot(index, total):
-	vec = np.zeros((1,total))
+	vec = np.zeros((total,))
 	vec[index-1] = 1
 	return vec 
 
 def occu_key_value_dict():
 	data_path = "../../ml-100k/"
-	occupation = pd.read_csv(data_path + "u.occupation")
+	occupation = pd.read_csv(data_path + "u.occupation", header = None)
 	occu_dict = {}
 	for i in range(occupation.shape[0]):
-		occu_dict[i] = occupation.loc[i, 0]
+		occu_dict[i] = occupation.loc[i][0]
+		# print(occu_dict[i])
 	occu_dict = {value: key for (key, value) in occu_dict.items()}
+	# print(occu_dict)
 	return occu_dict
 
 def genre_jey_value_dict():
 	data_path = "../../ml-100k/"
-	genre = pd.read_csv(data_path + "u.genre", header = ["Genre", "Id"],sep='|')
+	genre = pd.read_csv(data_path + "u.genre", names = ["Genre", "Id"],sep='|')
 	key_val = {} 
 	for i in range(genre.shape[0]):
 		id = int(genre.loc[i, "Id"])
@@ -71,8 +73,9 @@ def genre_jey_value_dict():
 
 def get_user_info():
 	data_path = "../../ml-100k/"
-	df = pd.read_csv(data_path+"u.user", sep=",", header=["Id", "Age", "Sex", "Occupation", "Pincode"])
+	df = pd.read_csv(data_path+"u.user", sep="|", names=["Id", "Age", "Sex", "Occupation", "Pincode"])
 	occu_dict = occu_key_value_dict() 
+	# print(occu_dict)
 	USER_FEATURES = {} 
 	for i in range(df.shape[0]):
 		id = int(df.loc[i,"Id"])
@@ -88,9 +91,10 @@ def get_user_info():
 			sex_v = get_one_hot(1, 2)
 		else:
 			sex_v = get_one_hot(2,2)
-		features.extend(age_v)
-		features.extend(sex_v)
-		features.extend(occupation_v)
+		features = np.append(np.append(age_v , sex_v), occupation_v)
+		# features.extend(age_v)
+		# features.extend(sex_v)
+		# features.extend(occupation_v)
 		USER_FEATURES[id] = features 
 	return USER_FEATURES 
 
@@ -104,7 +108,7 @@ def get_item_feature():
 	# print(header_) 
 	items = pd.read_csv(data_path + 'u.item', header=None,
 	            encoding="ISO-8859-1", sep="|", engine='python')
-	items = items.value
+	items = items.values 
 	ITEM_FEATURES = {} 
 	for item in items:
 		ITEM_FEATURES[int(item[0])] = item[5:] 
@@ -114,4 +118,6 @@ def get_item_feature():
 	
 
 
-get_item_feature()
+if __name__ == "__main__":
+	USER = get_user_info() 
+	print(USER)
