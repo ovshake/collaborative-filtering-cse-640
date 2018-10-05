@@ -6,20 +6,17 @@ import numpy as np
 data_path = "../../ml-100k/"
 def train_(filename):
     matrix = convertDataframeToMatrix(convertFileToDataframe(data_path+filename))
-    X_train = np.array([])
-    Y_train = np.array([]) 
+    X_train = []
+    Y_train = []
     USER_FEATURES = get_user_info() 
     ITEM_FEATURES = get_item_feature() 
     for user_id in range(matrix.shape[0]):
         for item_id in range(matrix.shape[1]):
-            # input_vec = np.array([])
-            # input_vec.extend(USER_FEATURES[user_id+1])
-            # input_vec.extend(ITEM_FEATURES[item_id+1])
-            input_vec = np.append(USER_FEATURES[user_id+1], ITEM_FEATURES[item_id + 1])
-            # X_train.append(input_vec)
-            X_train = np.append(X_train, input_vec)
-            # Y_train.append(matrix[user_id][item_id]) 
-            Y_train = np.append(Y_train, matrix[user_id][item_id])
+            input_vec = []
+            input_vec.extend(USER_FEATURES[user_id+1])
+            input_vec.extend(ITEM_FEATURES[item_id + 1])
+            X_train.append(input_vec) 
+            Y_train.append(matrix[user_id][item_id])
     
     clf = SVC(verbose=True)
     clf.fit(X_train , Y_train) 
@@ -28,21 +25,18 @@ def train_(filename):
 def test_(filename, clf):
     matrix = convertDataframeToMatrix(
         convertFileToDataframe(data_path+filename))
-    X_test = np.array([])
-    Y_test = np.array([])
+    X_test = []
+    Y_test = []
     USER_FEATURES = get_user_info()
     ITEM_FEATURES = get_item_feature()
     for user_id in range(matrix.shape[0]):
         for item_id in range(matrix.shape[1]):
-            # input_vec = np.array([])
-            # input_vec.extend(USER_FEATURES[user_id+1])
-            # input_vec.extend(ITEM_FEATURES[item_id+1])
-            input_vec = np.append(
-                USER_FEATURES[user_id+1], ITEM_FEATURES[item_id + 1])
-            X_test = np.append(X_test, input_vec)
-            # X_test.append(input_vec)
-            Y_test = np.append(Y_test , matrix[user_id][item_id])
-            # Y_test.append(matrix[user_id][item_id])
+            input_vec = []
+            input_vec.extend(USER_FEATURES[user_id+1])
+            input_vec.extend(ITEM_FEATURES[item_id + 1])
+            X_test.append(input_vec) 
+            Y_test.append(matrix[user_id][item_id])
+
     
     Y_pred = clf.predict(X_test)
     score = accuracy_score(Y_test, Y_pred)

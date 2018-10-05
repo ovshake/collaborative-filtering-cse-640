@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.metrics import pairwise_distances
 import sys
 import matplotlib.pyplot as plt 
+from helper import * 
 
 NUM_USERS = 943
 NUM_ITEMS = 1682
@@ -14,7 +15,7 @@ USER_AXIS = 0
 ITEM_AXIS = 1
 
 def convertFileToDataframe(filename):
-	df = pd.read_csv("../ml-100k/"+filename , sep = "\t" , names = ["User Id" , "Item Id" , "Rating" , "Timestamp"] , header = None)
+	df = pd.read_csv("../../ml-100k/"+filename , sep = "\t" , names = ["User Id" , "Item Id" , "Rating" , "Timestamp"] , header = None)
 	return df  
 
 def convertDataframeToMatrix(df):
@@ -69,6 +70,7 @@ def getMeanAbsoluteError(filename , k):
 	rating_matrix_base = convertDataframeToMatrix(convertFileToDataframe(train_file_name))
 	rating_matrix_test = convertDataframeToMatrix(convertFileToDataframe(test_file_name))
 	cosine_similarity = 1 - pairwise_distances(rating_matrix_base , metric='cosine')
+	# cosine_similarity = my_pairwise_distance(rating_matrix_base)
 	mean_absolute_error = 0
 	total_prediction = 0
 	for user_id in range(rating_matrix_test.shape[USER_AXIS]):
@@ -92,7 +94,7 @@ if __name__ == "__main__":
 			mean_error += split_error
 		print(fold_errors)
 		print(mean_error / 5)
-		k_mae.append((mean_error / 5)
+		k_mae.append((mean_error / 5)) 
 
 	plt.plot(x = k_vals , y = k_mae)
 	plt.title("Top K similiar user Vs Mean Absolute Error")

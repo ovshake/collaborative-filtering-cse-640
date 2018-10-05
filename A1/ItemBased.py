@@ -13,7 +13,7 @@ USER_AXIS = 1
 ITEM_AXIS = 0
 
 def convertFileToDataframe(filename):
-    df = pd.read_csv("../ml-100k/"+filename , sep = "\t" , names = ["User Id" , "Item Id" , "Rating" , "Timestamp"] , header = None)
+    df = pd.read_csv("../../ml-100k/"+filename , sep = "\t" , names = ["User Id" , "Item Id" , "Rating" , "Timestamp"] , header = None)
     return df  
 
 def convertDataframeToMatrix(df):
