@@ -291,6 +291,43 @@ def retrieve_ratings_matrix(movies, users, movie_ids, user_ids, user_names):
 
 	return np.asarray(user_item_matrix), np.asarray(ratings), zero_ratings, positive_ratings
 
+
+
+
+
+def ratings_for_project(RATINGS_MATRIX):
+
+	ratings=[]
+
+	for i in range(len(RATINGS_MATRIX)):
+		for j in range(len(RATINGS_MATRIX[i])):
+			li=[]
+			li.append(i)
+			li.append(j)
+			li.append(RATINGS_MATRIX[i][j])
+			ratings.append(li)
+
+	return ratings
+
+def get_ratings(RATINGS_MATRIX):
+	h = len(RATINGS_MATRIX)
+	w = len(RATINGS_MATRIX[i])
+	pos_rating_list = [] #user Id, item id  
+	neg_rating_list = [] 
+	for i in range(h):
+		for j in range(w):
+			if RATINGS_MATRIX[i][j] > 0:
+				pos_rating_list.append([i , j]) 
+			else:
+				neg_rating_list.append([i , j]) 
+
+
+	return pos_rating_list , neg_rating_list
+
+
+
+
+
 def train_test_split(self, test_size):
 	train=[]
 	test=[]
@@ -305,12 +342,18 @@ def train_test_split(self, test_size):
 
 	return np.asarray(train), np.asarray(test)
 
-USERS=retrieve_users()
-MOVIES=retrieve_movies()
-MOVIE_IDS=define_movie_id(MOVIES)
-USER_IDS, USER_NAMES=define_user_id(USERS)
-RATINGS_MATRIX, RATINGS, NEGATIVE_RATINGS, POSITIVE_RATINGS=retrieve_ratings_matrix(MOVIES, USERS, MOVIE_IDS, USER_IDS, USER_NAMES)
-print(RATINGS_MATRIX.shape, RATINGS.shape)
+# USERS=retrieve_users()
+# MOVIES=retrieve_movies()
+# MOVIE_IDS=define_movie_id(MOVIES)
+# USER_IDS, USER_NAMES=define_user_id(USERS)
+# RATINGS_MATRIX, RATINGS, NEGATIVE_RATINGS, POSITIVE_RATINGS=retrieve_ratings_matrix(MOVIES, USERS, MOVIE_IDS, USER_IDS, USER_NAMES)
+# print(RATINGS_MATRIX.shape, RATINGS.shape)
+
+RATINGS_MATRIX=pickle.load(open(RATINGS_MATRIX_FILE, 'rb'))
+RATINGS=ratings_for_project(RATINGS_MATRIX)
+NEGATIVE_RATINGS, POSITIVE_RATINGS = get_ratings(RATINGS_MATRIX)[::-1]
+
+
 
 args=parse_args()
 path="./"
@@ -342,7 +385,7 @@ testRatings=pos_ratings[:test_size]
 testNegatives=neg_ratings[:test_size] 
 train_pos=pos_ratings[test_size:]
 train_neg=neg_ratings[test_size:] 
-train=sp.dok_matrix((925, 2850), dtype=np.float64)
+train=sp.dok_matrix((len(RATINGS_MATRIX), len(RATINGS_MATRIX[0])), dtype=np.float64)
 for i in train_pos:
 	train[i[0], i[1]] = 1.0
 
